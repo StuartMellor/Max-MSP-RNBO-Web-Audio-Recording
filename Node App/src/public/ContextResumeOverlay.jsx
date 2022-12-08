@@ -25,8 +25,8 @@ const ContextResumeOverlay = ({ accept, overlayColor }) => {
                 width: '180px',
                 height: '70px',
             }}>
-            <h2 style={{ width: '180px',
-                height: '70px',position: 'absolute', left: 0, top: '-3px', zIndex: 2, lineHeight: '100%', }}>Start Max</h2>
+            <h1 style={{ width: '180px',
+                height: '70px',position: 'absolute', left: 0, top: '-3px', zIndex: 2, lineHeight: '100%', }}>Start Max</h1>
             <SvgNarrowButton viewBox="0 0 68 34" width={'180px'} height={'70px'} style={{ position: 'absolute', left: 0, top: 0 }} />
         </button>
     </div>

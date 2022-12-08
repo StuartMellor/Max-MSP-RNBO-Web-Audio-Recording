@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
-var _Record = _interopRequireDefault(require("./Record"));
+var _Stop = _interopRequireDefault(require("./Stop"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -20,22 +20,22 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var RecordUI = /*#__PURE__*/function (_Component) {
-  _inherits(RecordUI, _Component);
-  var _super = _createSuper(RecordUI);
-  function RecordUI() {
-    _classCallCheck(this, RecordUI);
+var StopUI = /*#__PURE__*/function (_Component) {
+  _inherits(StopUI, _Component);
+  var _super = _createSuper(StopUI);
+  function StopUI() {
+    _classCallCheck(this, StopUI);
     return _super.apply(this, arguments);
   }
-  _createClass(RecordUI, [{
+  _createClass(StopUI, [{
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react["default"].createElement("div", {
-        className: "record-ui"
-      }, /*#__PURE__*/_react["default"].createElement(_Record["default"], null));
+        className: "stop-ui"
+      }, /*#__PURE__*/_react["default"].createElement(_Stop["default"], null));
     }
   }]);
-  return RecordUI;
+  return StopUI;
 }(_react.Component);
-exports["default"] = RecordUI;
+exports["default"] = StopUI;
 ;

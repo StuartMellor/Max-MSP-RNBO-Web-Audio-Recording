@@ -39,7 +39,7 @@ var ContextResumeOverlay = function ContextResumeOverlay(_ref) {
       width: '180px',
       height: '70px'
     }
-  }, /*#__PURE__*/_react["default"].createElement("h2", {
+  }, /*#__PURE__*/_react["default"].createElement("h1", {
     style: {
       width: '180px',
       height: '70px',

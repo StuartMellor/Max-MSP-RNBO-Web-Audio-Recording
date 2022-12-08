@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { createDevice } from '@rnbo/js';
 import axios from 'axios';
 
+import AudioRecorderUI from './AudioRecorderUI';
 import ContextResumeOverlay from './ContextResumeOverlay';
+
+import './maxloader.styles.css';
 
 export default class MaxLoader extends Component {
     constructor() {
@@ -54,6 +57,15 @@ export default class MaxLoader extends Component {
         return (
             <div className='maxloader'>
                 <ContextResumeOverlay accept={this.acceptAppLoad} accepted={accepted} loading={loading} />
+                {
+                    /// Your max app goes below /// 
+                }
+
+                <AudioRecorderUI />
+                
+                {
+                    /// Yor max app goes above ///
+                }
             </div>
         )
     }
