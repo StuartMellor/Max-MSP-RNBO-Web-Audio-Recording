@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import React from 'react';
 
-import MaxPlayer from './maxplayer';
+import MaxLoader from './MaxLoader';
 
 const App = () => {
-    return <MaxPlayer />
+    return <MaxLoader maxFileName="audiorecorder" />
 }
 
 const root = createRoot(document.getElementById('root'));
