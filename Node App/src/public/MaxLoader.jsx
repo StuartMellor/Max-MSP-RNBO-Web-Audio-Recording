@@ -7,11 +7,13 @@ import ContextResumeOverlay from './ContextResumeOverlay';
 
 import './maxloader.styles.css';
 
+let context = null;
+
 export default class MaxLoader extends Component {
     constructor() {
         super();
-        this.context = null;
         this.device = null;
+        this.listeners = {};
     }
 
     state = {
@@ -19,25 +21,31 @@ export default class MaxLoader extends Component {
         loaded: false,
         audio_error: null,
         load_error: null,
+        context,
     }
 
     componentDidMount() {
         const WAContext = window.AudioContext || window.webkitAudioContext;
-        this.context = new WAContext();
-
-        this.setup(this.context);
+        context = new WAContext();
+        console.log(context);
+        this.setup(context);
     }
 
-    setup = (context) => {
+    setup = () => {
         const { maxFileName } = this.props;
         axios.get(`export/${maxFileName}.export.json`).then(response => {
-            if(response.status !== 200) {
+            if (response.status !== 200) {
                 throw `Could not retrieve ${maxFileName}`;
                 return;
             }
-            createDevice({ context, patcher: response.data }).then(device => {
+            createDevice({ context: context, patcher: response.data }).then(device => {
                 console.log("Max device successfully created!");
                 this.device = device;
+                this.device.parameters.forEach(param => {
+                    console.log(param.name);
+                });
+
+                this.device.messageEvent.subscribe(this.messageEventHandler);
                 this.setState({ loaded: true, load_error: null });
             });
         }).catch(err => {
@@ -47,7 +55,43 @@ export default class MaxLoader extends Component {
         });
     }
 
+    registerListener = (tag, callback) => {
+        this.listeners[tag] = { 
+            tag,
+            callback
+        }
+    }
+
+    removeListener = (tag) => {
+        // need to implement remove.
+    }
+
+    messageEventHandler = (msgEvent) => {
+        const { tag } = msgEvent;
+        const listenerTags = this.listeners.keys();
+
+        if(listenerTags.includes(msgEvent.tag)) {
+            this.listeners[msgEvent].callback(msgEvent);
+        }
+
+        if(msgEvent.tag === "startedrecording") {
+            console.log("Started recording!");
+        }
+        if(msgEvent.tag === "finishedrecording") {
+            console.log("Finished Recording!");
+            this.sendParam('record', 0);
+        }
+    }
+
+    sendParam = (param, value) => {
+        // console.log();
+        const paramOBj = this.device.parametersById.get(param);
+        paramOBj.value = value;
+    }
+
     acceptAppLoad = () => {
+        console.log(context);
+        context.resume();
         this.setState({ accepted: true });
     }
 
@@ -61,8 +105,8 @@ export default class MaxLoader extends Component {
                     /// Your max app goes below /// 
                 }
 
-                <AudioRecorderUI />
-                
+                <AudioRecorderUI sendParam={this.sendParam} registerListener={this.registerListener} />
+
                 {
                     /// Yor max app goes above ///
                 }

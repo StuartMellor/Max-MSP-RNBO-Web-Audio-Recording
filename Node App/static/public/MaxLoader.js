@@ -25,6 +25,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var context = null;
 var MaxLoader = /*#__PURE__*/function (_Component) {
   _inherits(MaxLoader, _Component);
   var _super = _createSuper(MaxLoader);
@@ -36,9 +37,10 @@ var MaxLoader = /*#__PURE__*/function (_Component) {
       accepted: false,
       loaded: false,
       audio_error: null,
-      load_error: null
+      load_error: null,
+      context: context
     });
-    _defineProperty(_assertThisInitialized(_this), "setup", function (context) {
+    _defineProperty(_assertThisInitialized(_this), "setup", function () {
       var maxFileName = _this.props.maxFileName;
       _axios["default"].get("export/".concat(maxFileName, ".export.json")).then(function (response) {
         if (response.status !== 200) {
@@ -51,6 +53,10 @@ var MaxLoader = /*#__PURE__*/function (_Component) {
         }).then(function (device) {
           console.log("Max device successfully created!");
           _this.device = device;
+          _this.device.parameters.forEach(function (param) {
+            console.log(param.name);
+          });
+          _this.device.messageEvent.subscribe(_this.messageEventHandler);
           _this.setState({
             loaded: true,
             load_error: null
@@ -64,21 +70,52 @@ var MaxLoader = /*#__PURE__*/function (_Component) {
         });
       });
     });
+    _defineProperty(_assertThisInitialized(_this), "registerListener", function (tag, callback) {
+      _this.listeners[tag] = {
+        tag: tag,
+        callback: callback
+      };
+    });
+    _defineProperty(_assertThisInitialized(_this), "removeListener", function (tag) {
+      // need to implement remove.
+    });
+    _defineProperty(_assertThisInitialized(_this), "messageEventHandler", function (msgEvent) {
+      var tag = msgEvent.tag;
+      var listenerTags = _this.listeners.keys();
+      if (listenerTags.includes(msgEvent.tag)) {
+        _this.listeners[msgEvent].callback(msgEvent);
+      }
+      if (msgEvent.tag === "startedrecording") {
+        console.log("Started recording!");
+      }
+      if (msgEvent.tag === "finishedrecording") {
+        console.log("Finished Recording!");
+        _this.sendParam('record', 0);
+      }
+    });
+    _defineProperty(_assertThisInitialized(_this), "sendParam", function (param, value) {
+      // console.log();
+      var paramOBj = _this.device.parametersById.get(param);
+      paramOBj.value = value;
+    });
     _defineProperty(_assertThisInitialized(_this), "acceptAppLoad", function () {
+      console.log(context);
+      context.resume();
       _this.setState({
         accepted: true
       });
     });
-    _this.context = null;
     _this.device = null;
+    _this.listeners = {};
     return _this;
   }
   _createClass(MaxLoader, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var WAContext = window.AudioContext || window.webkitAudioContext;
-      this.context = new WAContext();
-      this.setup(this.context);
+      context = new WAContext();
+      console.log(context);
+      this.setup(context);
     }
   }, {
     key: "render",
@@ -92,7 +129,10 @@ var MaxLoader = /*#__PURE__*/function (_Component) {
         accept: this.acceptAppLoad,
         accepted: accepted,
         loading: loading
-      }), /*#__PURE__*/_react["default"].createElement(_AudioRecorderUI["default"], null));
+      }), /*#__PURE__*/_react["default"].createElement(_AudioRecorderUI["default"], {
+        sendParam: this.sendParam,
+        registerListener: this.registerListener
+      }));
     }
   }]);
   return MaxLoader;

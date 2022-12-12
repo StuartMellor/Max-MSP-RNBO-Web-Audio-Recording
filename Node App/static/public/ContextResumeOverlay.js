@@ -24,7 +24,13 @@ var overlayStyle = {
 };
 var ContextResumeOverlay = function ContextResumeOverlay(_ref) {
   var accept = _ref.accept,
-    overlayColor = _ref.overlayColor;
+    overlayColor = _ref.overlayColor,
+    accepted = _ref.accepted;
+  if (accepted) {
+    return /*#__PURE__*/_react["default"].createElement("div", {
+      className: "contextresume-overlay-hidden"
+    });
+  }
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "contextresume-overlay",
     style: _objectSpread(_objectSpread({}, overlayStyle), {}, {

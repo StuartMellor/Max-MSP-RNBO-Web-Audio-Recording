@@ -7,6 +7,11 @@
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
+}
+
+.control-panel {
+    width: 50%;
 }
 
 #recorder-controls {
@@ -22,4 +27,26 @@
     justify-content: center;
     align-items: center;
 }
+
+#recording-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#playback-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#recorder-config {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 

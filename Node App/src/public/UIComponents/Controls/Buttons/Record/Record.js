@@ -1,25 +1,23 @@
 import * as React from "react";
-const SvgRecord = (props) => (
+const SvgRec = (props) => (
   <svg
-    width={114}
-    height={270}
-    fill="none"
+    width={68}
+    height={62}
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path fill="#fff" d="M0 0h114v270H0z" />
-    <g filter="url(#Record_svg__a)">
-      <rect x={27} y={108} width={60} height={54} rx={2.5} fill="#D9D9D9" />
+    <g filter="url(#rec_svg__a)">
+      <rect x={4} width={60} height={54} rx={2.5} fill="#D9D9D9" />
     </g>
-    <rect x={27} y={108} width={60} height={50} rx={2.5} fill="#ECECEC" />
-    <g filter="url(#Record_svg__b)">
-      <circle cx={57.5} cy={133.5} r={10.5} fill="#D9D9D9" />
+    <rect x={4} width={60} height={50} rx={2.5} fill="#ECECEC" />
+    <g filter="url(#rec_svg__b)">
+      <circle cx={34.5} cy={25.5} r={10.5} fill="#D9D9D9" />
     </g>
     <defs>
       <filter
-        id="Record_svg__a"
-        x={23}
-        y={108}
+        id="rec_svg__a"
+        x={0}
+        y={0}
         width={68}
         height={62}
         filterUnits="userSpaceOnUse"
@@ -35,17 +33,17 @@ const SvgRecord = (props) => (
         <feGaussianBlur stdDeviation={2} />
         <feComposite in2="hardAlpha" operator="out" />
         <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
-        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_9_147" />
+        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_9_184" />
         <feBlend
           in="SourceGraphic"
-          in2="effect1_dropShadow_9_147"
+          in2="effect1_dropShadow_9_184"
           result="shape"
         />
       </filter>
       <filter
-        id="Record_svg__b"
-        x={47}
-        y={123}
+        id="rec_svg__b"
+        x={24}
+        y={15}
         width={21}
         height={25}
         filterUnits="userSpaceOnUse"
@@ -62,9 +60,10 @@ const SvgRecord = (props) => (
         <feGaussianBlur stdDeviation={2} />
         <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
         <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend in2="shape" result="effect1_innerShadow_9_147" />
+        <feBlend in2="shape" result="effect1_innerShadow_9_184" />
       </filter>
     </defs>
   </svg>
 );
-export default SvgRecord;
+export default SvgRec;
+

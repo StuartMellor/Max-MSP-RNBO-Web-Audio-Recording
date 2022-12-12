@@ -11,38 +11,33 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 var SvgStop = function SvgStop(props) {
   return /*#__PURE__*/React.createElement("svg", _extends({
-    width: 114,
-    height: 270,
+    width: 68,
+    height: 62,
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), /*#__PURE__*/React.createElement("path", {
-    fill: "#fff",
-    d: "M0 0h114v270H0z"
-  }), /*#__PURE__*/React.createElement("g", {
-    filter: "url(#Stop_svg__a)"
+  }, props), /*#__PURE__*/React.createElement("g", {
+    filter: "url(#stop_svg__a)"
   }, /*#__PURE__*/React.createElement("rect", {
-    x: 27,
-    y: 108,
+    x: 4,
     width: 60,
     height: 54,
     rx: 2.5,
     fill: "#D9D9D9"
   })), /*#__PURE__*/React.createElement("rect", {
-    x: 27,
-    y: 108,
+    x: 4,
     width: 60,
     height: 50,
     rx: 2.5,
     fill: "#ECECEC"
   }), /*#__PURE__*/React.createElement("g", {
-    filter: "url(#Stop_svg__b)"
+    filter: "url(#stop_svg__b)"
   }, /*#__PURE__*/React.createElement("path", {
     fill: "#D9D9D9",
-    d: "M47 122h21v21H47z"
+    d: "M24 14h21v21H24z"
   })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
-    id: "Stop_svg__a",
-    x: 23,
-    y: 108,
+    id: "stop_svg__a",
+    x: 0,
+    y: 0,
     width: 68,
     height: 62,
     filterUnits: "userSpaceOnUse",
@@ -65,15 +60,15 @@ var SvgStop = function SvgStop(props) {
     values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"
   }), /*#__PURE__*/React.createElement("feBlend", {
     in2: "BackgroundImageFix",
-    result: "effect1_dropShadow_9_138"
+    result: "effect1_dropShadow_9_183"
   }), /*#__PURE__*/React.createElement("feBlend", {
     "in": "SourceGraphic",
-    in2: "effect1_dropShadow_9_138",
+    in2: "effect1_dropShadow_9_183",
     result: "shape"
   })), /*#__PURE__*/React.createElement("filter", {
-    id: "Stop_svg__b",
-    x: 47,
-    y: 122,
+    id: "stop_svg__b",
+    x: 24,
+    y: 14,
     width: 21,
     height: 25,
     filterUnits: "userSpaceOnUse",
@@ -102,7 +97,7 @@ var SvgStop = function SvgStop(props) {
     values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
   }), /*#__PURE__*/React.createElement("feBlend", {
     in2: "shape",
-    result: "effect1_innerShadow_9_138"
+    result: "effect1_innerShadow_9_183"
   }))));
 };
 var _default = SvgStop;

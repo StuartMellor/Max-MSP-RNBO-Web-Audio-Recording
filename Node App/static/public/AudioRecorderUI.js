@@ -24,25 +24,71 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 var AudioRecorderUI = /*#__PURE__*/function (_Component) {
   _inherits(AudioRecorderUI, _Component);
   var _super = _createSuper(AudioRecorderUI);
   function AudioRecorderUI() {
+    var _this;
     _classCallCheck(this, AudioRecorderUI);
-    return _super.apply(this, arguments);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    _this = _super.call.apply(_super, [this].concat(args));
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      recording: false,
+      recordingAvailable: false,
+      playing: false
+    });
+    _defineProperty(_assertThisInitialized(_this), "receiveMeterVal", function (msgEvent) {});
+    _defineProperty(_assertThisInitialized(_this), "receiveRecTime", function (msgEvent) {});
+    _defineProperty(_assertThisInitialized(_this), "beginRecording", function () {
+      var _this$props = _this.props,
+        registerListener = _this$props.registerListener,
+        sendParam = _this$props.sendParam;
+      registerListener('in_meter', _this.receiveMeterVal);
+      registerListener('rectime', _this.receiveRecTime);
+      sendParam('record', 1);
+    });
+    _defineProperty(_assertThisInitialized(_this), "recordPanel", function () {
+      var sendParam = _this.props.sendParam;
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        id: "record-panel"
+      }, /*#__PURE__*/_react["default"].createElement(_RecordUI["default"], {
+        onClick: _this.beginRecording
+      }), /*#__PURE__*/_react["default"].createElement("h1", {
+        style: {
+          textAlign: 'center'
+        }
+      }, "00:00"));
+    });
+    _defineProperty(_assertThisInitialized(_this), "playbackPanel", function () {
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        id: "playback-panel"
+      }, /*#__PURE__*/_react["default"].createElement(_PlayUI["default"], null), /*#__PURE__*/_react["default"].createElement("h1", {
+        style: {
+          textAlign: 'center'
+        }
+      }, "00:00"));
+    });
+    return _this;
   }
   _createClass(AudioRecorderUI, [{
     key: "render",
     value: function render() {
+      var recordingAvailable = this.state.recordingAvailable;
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: "audiorecorder-ui"
-      }, /*#__PURE__*/_react["default"].createElement("h1", null, "Max MSP Audio Recorder"), /*#__PURE__*/_react["default"].createElement("div", {
+      }, /*#__PURE__*/_react["default"].createElement("h1", null, "Max MSP Audio Recorder"), /*#__PURE__*/_react["default"].createElement("label", null, "Duration"), /*#__PURE__*/_react["default"].createElement("input", null), /*#__PURE__*/_react["default"].createElement("div", {
         className: "data-view",
         id: "recorder-graphing"
       }), /*#__PURE__*/_react["default"].createElement("div", {
         className: "control-panel",
-        id: "recorder-controls"
-      }, /*#__PURE__*/_react["default"].createElement(_RecordUI["default"], null), /*#__PURE__*/_react["default"].createElement(_PlayUI["default"], null), /*#__PURE__*/_react["default"].createElement(_StopUI["default"], null)));
+        id: "recorder-controls",
+        style: {
+          width: '50%'
+        }
+      }, !recordingAvailable ? this.recordPanel() : this.playbackPanel()));
     }
   }]);
   return AudioRecorderUI;

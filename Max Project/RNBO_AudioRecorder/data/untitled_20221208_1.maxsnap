@@ -1,0 +1,46 @@
+{
+	"filetype" : "C74Snapshot",
+	"version" : 2,
+	"minorversion" : 0,
+	"name" : "untitled",
+	"origin" : "6f887b47-76ea-11ed-bb47-50ebf6c3a721",
+	"type" : "rnbo",
+	"subtype" : "",
+	"embed" : 1,
+	"snapshot" : 	{
+		"__presetid" : "6f887b47-76ea-11ed-bb47-50ebf6c3a721",
+		"inputmeter_on" : 		{
+			"value" : 0.0
+		}
+,
+		"record" : 		{
+			"value" : 0.0
+		}
+,
+		"input_gain" : 		{
+			"value" : 1.0
+		}
+,
+		"clear" : 		{
+			"value" : 0.0
+		}
+,
+		"rec_duration" : 		{
+			"value" : 5.0
+		}
+,
+		"channels" : 		{
+			"value" : 1.0
+		}
+,
+		"outputmeter_on" : 		{
+			"value" : 0.0
+		}
+,
+		"play" : 		{
+			"value" : 0.0
+		}
+
+	}
+
+}

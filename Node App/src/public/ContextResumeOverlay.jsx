@@ -14,7 +14,10 @@ const overlayStyle = {
     alignItems: 'center',
 };
 
-const ContextResumeOverlay = ({ accept, overlayColor }) => {
+const ContextResumeOverlay = ({ accept, overlayColor, accepted }) => {
+    if(accepted) {
+        return <div className='contextresume-overlay-hidden'/>
+    }
     return <div className='contextresume-overlay' style={{ ...overlayStyle, backgroundColor: overlayColor }}>
         <button
             onClick={accept}
