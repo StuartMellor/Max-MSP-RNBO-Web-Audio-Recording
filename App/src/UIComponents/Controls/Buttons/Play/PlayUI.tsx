@@ -1,7 +1,11 @@
-import SvgPlay from "./PlaySvg";
+import SvgPlay from './PlaySvg';
 
-export const PlayUI = () => (
-  <div className="play-ui">
+export interface PlayUIProps {
+  onClick: () => void;
+}
+
+export const PlayUI = ({ onClick }: PlayUIProps) => (
+  <button onClick={onClick} className="play-ui">
     <SvgPlay />
-  </div>
+  </button>
 );

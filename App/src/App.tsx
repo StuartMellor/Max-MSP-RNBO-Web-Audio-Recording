@@ -1,4 +1,4 @@
-import MaxLoader from "./MaxLoader";
+import MaxLoader from './MaxLoader';
 
 const App = () => {
   return <MaxLoader maxFileName="audiorecorder" />;

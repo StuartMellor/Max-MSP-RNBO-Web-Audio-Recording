@@ -1,9 +1,9 @@
-import { Device, createDevice } from "@rnbo/js";
-import { useEffect, useRef, useState } from "react";
+import { Device, createDevice } from '@rnbo/js';
+import { useEffect, useRef, useState } from 'react';
 
-import ContextResumeOverlay from "./ContextResumeOverlay";
-import "./maxloader.styles.css";
-import AudioRecorderUI from "./AudioRecorderUI";
+import AudioRecorderUI from './AudioRecorderUI';
+import ContextResumeOverlay from './ContextResumeOverlay';
+import './maxloader.styles.css';
 
 export interface MaxLoaderProps {
   maxFileName: string;
@@ -15,9 +15,7 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
   const [loading, setLoading] = useState<boolean | undefined>();
   // const [audio_error, setAudioError] = useState(false);
   const [load_error, setLoadError] = useState(false);
-  const [listeners, setListeners] = useState<Record<string, () => void> | {}>(
-    {},
-  );
+  const [listeners, setListeners] = useState<Record<string, () => void> | {}>({});
   const context = useRef<AudioContext | undefined>();
   const device = useRef<Device | undefined>();
 
@@ -96,7 +94,7 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
   const acceptAppLoad = async () => {
     if (context.current) {
       await context.current.resume();
-      if (context.current.state === "running") {
+      if (context.current.state === 'running') {
         setAccepted(true);
         return;
       }
@@ -108,15 +106,8 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
 
   return (
     <div className="maxloader">
-      <ContextResumeOverlay
-        accept={acceptAppLoad}
-        accepted={accepted}
-        loading={loading}
-      />
-      <AudioRecorderUI
-        sendParam={sendParam}
-        registerListener={registerListener}
-      />
+      <ContextResumeOverlay accept={acceptAppLoad} accepted={accepted} loading={loading} />
+      <AudioRecorderUI sendParam={sendParam} registerListener={registerListener} />
     </div>
   );
 };
