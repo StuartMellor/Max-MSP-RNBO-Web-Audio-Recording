@@ -1,5 +1,5 @@
-import { Device, createDevice } from '@rnbo/js';
-import { useEffect, useRef, useState } from 'react';
+import { Device, MessageEvent, createDevice } from '@rnbo/js';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import AudioRecorderUI from './AudioRecorderUI';
 import ContextResumeOverlay from './ContextResumeOverlay';
@@ -13,11 +13,51 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
   const [accepted, setAccepted] = useState(false);
   const [resumeError, setResumeError] = useState(false);
   const [loading, setLoading] = useState<boolean | undefined>();
-  // const [audio_error, setAudioError] = useState(false);
   const [load_error, setLoadError] = useState(false);
-  const [listeners, setListeners] = useState<Record<string, () => void> | {}>({});
+  const [listeners, setListeners] = useState<Record<string, (msgEvent: MessageEvent) => void> | undefined>();
   const context = useRef<AudioContext | undefined>();
   const device = useRef<Device | undefined>();
+
+  useEffect(() => {
+    console.log('listenersChanged: ', listeners);
+  }, [listeners]);
+
+  const getBufferData = async (bufferName: string) => {
+    const dataBuffer = await device.current?.releaseDataBuffer(bufferName);
+    console.log(dataBuffer);
+  };
+
+  const messageEventHandler = useCallback(
+    (msgEvent: MessageEvent) => {
+      if (listeners === undefined) return;
+      const { tag } = msgEvent;
+      console.log(tag);
+      const listenerTags = Object.keys(listeners);
+
+      if (listenerTags.includes(msgEvent.tag)) {
+        listeners[tag](msgEvent);
+      }
+
+      if (msgEvent.tag === 'startedrecording') {
+        console.log('Started recording!');
+      }
+      if (msgEvent.tag === 'finishedrecording') {
+        console.log('Finished Recording!');
+        sendParam('record', 0);
+        getBufferData('recordedaudio');
+      }
+    },
+    [listeners]
+  );
+
+  useEffect(() => {
+    console.log('messageEVentHandlerChanged: ', messageEventHandler);
+  }, [messageEventHandler]);
+
+  useEffect(() => {
+    console.log('listener count: ', device.current?.messageEvent.listenerCount);
+    console.log('listeners: ', listeners);
+  }, [device.current?.messageEvent.listenerCount, listeners]);
 
   useEffect(() => {
     const setup = async () => {
@@ -40,11 +80,20 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
         });
 
         if (device.current) {
-          device.current.parameters.forEach((param) => {
-            console.log(param.name);
+          const descriptions = device.current.dataBufferDescriptions;
+          console.log('descriptions: ', descriptions);
+
+          for (const desc of descriptions) {
+            console.log(desc);
+          }
+
+          device.current.messageEvent.subscribe(messageEventHandler);
+          device.current.parameterChangeEvent.subscribe((param) => {
+            // Called when param is updated / changed
+            console.log(param);
           });
 
-          // device.current.messageEvent.subscribe(messageEventHandler);
+          sendParam('inputmeter_on', 1);
           setLoadError(false);
           setLoading(false);
         }
@@ -55,36 +104,22 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
       }
     };
     setup();
-  }, [maxFileName]);
+  }, [maxFileName, messageEventHandler]);
 
-  const registerListener = (tag: string, callback: () => void) => {
-    const newListeners = listeners ? { ...listeners } : {};
-    newListeners[tag] = callback;
-    setListeners(newListeners);
-  };
+  const registerListener = useCallback((tag: string, callback: (msgEvent: MessageEvent) => void) => {
+    setListeners((prevListeners) => {
+      const newListeners = { ...prevListeners };
+      newListeners[tag] = callback;
+      console.log('newListeners: ', newListeners);
+      return newListeners;
+    });
+  }, []);
 
   // const removeListener = (tag: string) => {
   //     const newListeners = listeners ? { ...listeners} : {};
   //     delete newListeners[tag];
   //     setListeners(newListeners);
   // };
-
-  // const messageEventHandler = (msgEvent) => {
-  //     const { tag } = msgEvent;
-  //     const listenerTags = this.listeners.keys();
-
-  //     if (listenerTags.includes(msgEvent.tag)) {
-  //         this.listeners[msgEvent].callback(msgEvent);
-  //     }
-
-  //     if (msgEvent.tag === "startedrecording") {
-  //         console.log("Started recording!");
-  //     }
-  //     if (msgEvent.tag === "finishedrecording") {
-  //         console.log("Finished Recording!");
-  //         this.sendParam('record', 0);
-  //     }
-  // }
 
   const sendParam = (param: string, value: number) => {
     const paramOBj = device.current?.parametersById.get(param);
@@ -104,10 +139,18 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
     setLoadError(true);
   };
 
+  if (resumeError) {
+    return <div>Resume Error</div>;
+  }
+
+  if (load_error) {
+    return <div>Load Error</div>;
+  }
+
   return (
     <div className="maxloader">
       <ContextResumeOverlay accept={acceptAppLoad} accepted={accepted} loading={loading} />
-      <AudioRecorderUI sendParam={sendParam} registerListener={registerListener} />
+      {accepted && <AudioRecorderUI sendParam={sendParam} registerListener={registerListener} />}
     </div>
   );
 };

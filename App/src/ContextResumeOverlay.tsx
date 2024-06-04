@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export interface ContextResumeOverlayProps {
   accept: () => void;
   overlayColor?: string;
@@ -7,16 +9,18 @@ export interface ContextResumeOverlayProps {
 
 const ContextResumeOverlay = ({
   accept,
-  overlayColor = 'rgba(255, 255, 255, 0.6)',
+  overlayColor = 'rgba(0,0,0,0.8)',
   accepted,
   loading,
 }: ContextResumeOverlayProps) => {
+  const [hovered, setHovered] = useState(false);
+
   if (accepted) {
     return <div className="contextresume-overlay" style={{ backgroundColor: 'rgba(0,0,0,0)' }} />;
   }
 
   if (typeof loading === 'undefined') {
-    return <div className="contextresume-overlay" style={{ backgroundColor: 'black' }} />;
+    return <div className="contextresume-overlay" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }} />;
   }
 
   return (
@@ -33,28 +37,30 @@ const ContextResumeOverlay = ({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: overlayColor,
-        transition: 'background-color 0.5s ease-in-out',
+        transition: 'background-color 0.1s ease-in-out',
       }}
     >
       <button
         onClick={accept}
+        onMouseOver={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         style={{
           position: 'relative',
-          background: 'none',
+          background: hovered ? 'rgba(200, 200, 200)' : 'rgba(150, 150,150)',
           border: 'none',
           width: '180px',
           height: '70px',
+          borderRadius: '10px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'background-color 0.1s ease-in-out',
         }}
       >
         <h1
           style={{
-            width: '180px',
-            height: '70px',
-            position: 'absolute',
-            left: 0,
-            top: '-3px',
-            zIndex: 2,
             lineHeight: '100%',
+            color: 'white',
+            margin: 0,
           }}
         >
           Start Max

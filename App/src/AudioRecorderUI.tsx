@@ -1,11 +1,10 @@
+import { MessageEvent } from '@rnbo/js';
 import { useEffect, useState } from 'react';
-
-import { PlayUI } from '@UIComponents';
 import './audiorecorder.styles.css';
 
 interface AudioRecorderUIProps {
-  registerListener: (msg: string, cb: (msgEvent: any) => void) => void;
-  sendParam: (param: string, value: any) => void;
+  registerListener: (tag: string, callback: (msgEvent: MessageEvent) => void) => void;
+  sendParam: (param: string, value: number) => void;
 }
 
 const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) => {
@@ -17,17 +16,21 @@ const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) 
     console.log('Recorder state updated: ', recording, playing);
   }, [recording, playing]);
 
-  const receiveMeterVal = (msgEvent: string) => {
-    console.log(msgEvent);
+  useEffect(() => {
+    registerListener('in_meter', receiveMeterVal);
+    registerListener('rectime', receiveRecTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const receiveMeterVal = (msgEvent: MessageEvent) => {
+    console.log(msgEvent.payload);
   };
 
-  const receiveRecTime = (msgEvent: string) => {
-    console.log(msgEvent);
+  const receiveRecTime = (msgEvent: MessageEvent) => {
+    console.log(msgEvent.payload);
   };
 
   const beginRecording = () => {
-    registerListener('in_meter', receiveMeterVal);
-    registerListener('rectime', receiveRecTime);
     sendParam('record', 1);
     // Due to the way we're sending params, we will need to ensure recording is actually happening.
     // This is a temporary solution.
@@ -43,21 +46,22 @@ const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) 
 
   const RecordPanel = () => (
     <div id="record-panel">
-      <PlayUI onClick={beginRecording} />
+      <button onClick={beginRecording}>Record</button>
       <h1 style={{ textAlign: 'center' }}>00:00</h1>
     </div>
   );
 
   const PlaybackPanel = () => (
     <div id="playback-panel">
-      <PlayUI onClick={beginPlayback} />
+      <button onClick={beginPlayback}>Record</button>
       <h1 style={{ textAlign: 'center' }}>00:00</h1>
     </div>
   );
 
   return (
-    <div className="audiorecorder-ui">
-      <h1>Max MSP Audio Recorder</h1>
+    <div className="audiorecorder-ui" style={{ display: 'flex', gap: '10px' }}>
+      <h1 style={{ margin: 0 }}>Max MSP</h1>
+      <h1 style={{ margin: 0 }}>Audio Recorder</h1>
       <label>Duration</label>
       <input />
       <div className="data-view" id="recorder-graphing"></div>
