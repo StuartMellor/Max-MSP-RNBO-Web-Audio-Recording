@@ -31,33 +31,14 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
     (msgEvent: MessageEvent) => {
       if (listeners === undefined) return;
       const { tag } = msgEvent;
-      console.log(tag);
       const listenerTags = Object.keys(listeners);
 
       if (listenerTags.includes(msgEvent.tag)) {
         listeners[tag](msgEvent);
       }
-
-      if (msgEvent.tag === 'startedrecording') {
-        console.log('Started recording!');
-      }
-      if (msgEvent.tag === 'finishedrecording') {
-        console.log('Finished Recording!');
-        sendParam('record', 0);
-        getBufferData('recordedaudio');
-      }
     },
     [listeners]
   );
-
-  useEffect(() => {
-    console.log('messageEVentHandlerChanged: ', messageEventHandler);
-  }, [messageEventHandler]);
-
-  useEffect(() => {
-    console.log('listener count: ', device.current?.messageEvent.listenerCount);
-    console.log('listeners: ', listeners);
-  }, [device.current?.messageEvent.listenerCount, listeners]);
 
   useEffect(() => {
     const setup = async () => {
@@ -93,6 +74,15 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
             console.log(param);
           });
 
+          const handleSuccess = (stream: MediaStream) => {
+            if (!device.current) {
+              return;
+            }
+            const source = context.current?.createMediaStreamSource(stream);
+            source?.connect(device.current?.node);
+          };
+          navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(handleSuccess);
+
           sendParam('inputmeter_on', 1);
           setLoadError(false);
           setLoading(false);
@@ -126,6 +116,15 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
     paramOBj.value = value;
   };
 
+  const openBuffer = async (bufName: string) => {
+    if (!device.current) {
+      return;
+    }
+    console.log(device.current.dataBufferDescriptions);
+    const data = await device.current.releaseDataBuffer(bufName);
+    console.log(data);
+  };
+
   const acceptAppLoad = async () => {
     if (context.current) {
       await context.current.resume();
@@ -150,7 +149,9 @@ const MaxLoader = ({ maxFileName }: MaxLoaderProps) => {
   return (
     <div className="maxloader">
       <ContextResumeOverlay accept={acceptAppLoad} accepted={accepted} loading={loading} />
-      {accepted && <AudioRecorderUI sendParam={sendParam} registerListener={registerListener} />}
+      {accepted && (
+        <AudioRecorderUI sendParam={sendParam} registerListener={registerListener} openBuffer={openBuffer} />
+      )}
     </div>
   );
 };

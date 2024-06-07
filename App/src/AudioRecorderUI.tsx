@@ -4,11 +4,13 @@ import './audiorecorder.styles.css';
 
 interface AudioRecorderUIProps {
   registerListener: (tag: string, callback: (msgEvent: MessageEvent) => void) => void;
+  openBuffer: (bufferName: string) => void;
   sendParam: (param: string, value: number) => void;
 }
 
-const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) => {
+const AudioRecorderUI = ({ registerListener, sendParam, openBuffer }: AudioRecorderUIProps) => {
   const [recording, setRecording] = useState(false);
+  const [timeZeroCount, setTimeZeroCount] = useState(0);
   const [recordingAvailable] = useState(false);
   const [playing, setPlaying] = useState(false);
 
@@ -17,8 +19,12 @@ const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) 
   }, [recording, playing]);
 
   useEffect(() => {
-    registerListener('in_meter', receiveMeterVal);
+    // registerListener('in_meter', receiveMeterVal);
     registerListener('rectime', receiveRecTime);
+    registerListener('finishedrecording', finishedRecording);
+    registerListener('startedrecording', () => {
+      setRecording(true);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -26,21 +32,26 @@ const AudioRecorderUI = ({ registerListener, sendParam }: AudioRecorderUIProps) 
     console.log(msgEvent.payload);
   };
 
+  const finishedRecording = (msgEvent: MessageEvent) => {
+    console.log(msgEvent.payload);
+  };
+
   const receiveRecTime = (msgEvent: MessageEvent) => {
     console.log(msgEvent.payload);
+    // We'll expect two 0's to come up. On the second, we'll set recording to finished
+    if (msgEvent.payload === 0) {
+      console.log('Finished recording!');
+      openBuffer('recordedaudio');
+      setRecording(false);
+    }
   };
 
   const beginRecording = () => {
     sendParam('record', 1);
-    // Due to the way we're sending params, we will need to ensure recording is actually happening.
-    // This is a temporary solution.
-    setRecording(true);
   };
 
   const beginPlayback = () => {
     sendParam('play', 1);
-    // Due to the way we're sending params, we will need to ensure playback is actually happening.
-    // This is a temporary solution.
     setPlaying(true);
   };
 
